@@ -9,6 +9,7 @@
 #import "ASIDownloadCache.h"
 #import "ASIHTTPRequest.h"
 #import <CommonCrypto/CommonHMAC.h>
+#import "ASINSStringRFC1123DateCategory.h"
 
 static ASIDownloadCache *sharedCache = nil;
 
@@ -291,7 +292,7 @@ static NSString *permanentCacheFolder = @"PermanentStore";
 		// Look for an Expires header to see if the content is out of date
 		NSString *expires = [cachedHeaders objectForKey:@"Expires"];
 		if (expires) {
-			if ([[ASIHTTPRequest dateFromRFC1123String:expires] timeIntervalSinceNow] < 0) {
+			if ([[expires dateFromRFC1123] timeIntervalSinceNow] < 0) {
 				[[self accessLock] unlock];
 				return NO;
 			}
@@ -304,7 +305,7 @@ static NSString *permanentCacheFolder = @"PermanentStore";
 				[scanner scanString:@"=" intoString:NULL];
 				NSTimeInterval maxAge = 0;
 				[scanner scanDouble:&maxAge];
-				NSDate *fetchDate = [ASIHTTPRequest dateFromRFC1123String:[cachedHeaders objectForKey:@"X-ASIHTTPRequest-Fetch-date"]];
+				NSDate *fetchDate = [[cachedHeaders objectForKey:@"X-ASIHTTPRequest-Fetch-date"] dateFromRFC1123];
 
 				NSDate *expiryDate = [[[NSDate alloc] initWithTimeInterval:maxAge sinceDate:fetchDate] autorelease];
 
@@ -394,7 +395,7 @@ static NSString *permanentCacheFolder = @"PermanentStore";
 					withShouldKeepInCacheBlock:^(NSDictionary *headers) {
 						NSObject *expiresHeader = [headers objectForKey:@"Expires"];
 						if (expiresHeader) {
-							NSDate *expiresDate = [ASIHTTPRequest dateFromRFC1123String:(NSString *)expiresHeader];
+							NSDate *expiresDate = [(NSString *)expiresHeader dateFromRFC1123];
 							if (expiresDate && [expiresDate compare:[NSDate date]] == NSOrderedAscending) {
 								return NO;
 							}

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0BB9C47B12948C56008D75BB /* ASINSStringRFC1123DateCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB9C47A12948C56008D75BB /* ASINSStringRFC1123DateCategory.m */; };
+		0BB9C48E12948E83008D75BB /* ASINSStringRFC1123DataCategoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB9C48D12948E83008D75BB /* ASINSStringRFC1123DataCategoryTests.m */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		B502441B1025D36B002B13E1 /* ProxyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B502441A1025D36B002B13E1 /* ProxyTests.m */; };
 		B50C17DB121C254D0055FCAB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B50C17DA121C254D0055FCAB /* Security.framework */; };
@@ -102,6 +104,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0BB9C47912948C56008D75BB /* ASINSStringRFC1123DateCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASINSStringRFC1123DateCategory.h; sourceTree = "<group>"; };
+		0BB9C47A12948C56008D75BB /* ASINSStringRFC1123DateCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINSStringRFC1123DateCategory.m; sourceTree = "<group>"; };
+		0BB9C48C12948E83008D75BB /* ASINSStringRFC1123DataCategoryTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASINSStringRFC1123DataCategoryTests.h; sourceTree = "<group>"; };
+		0BB9C48D12948E83008D75BB /* ASINSStringRFC1123DataCategoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASINSStringRFC1123DataCategoryTests.m; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -348,6 +354,8 @@
 				B53E626F1255ED8700C1E79A /* ASIDataCompressor.m */,
 				B53E628E1255EE4B00C1E79A /* ASIDataDecompressor.h */,
 				B53E628D1255EE4B00C1E79A /* ASIDataDecompressor.m */,
+				0BB9C47912948C56008D75BB /* ASINSStringRFC1123DateCategory.h */,
+				0BB9C47A12948C56008D75BB /* ASINSStringRFC1123DateCategory.m */,
 				B5873F8F10FF2890001E145F /* CloudFiles */,
 				B51E61A2100BA84C004A300D /* S3 */,
 				B55B5D190F76568E0064029C /* Tests */,
@@ -381,6 +389,8 @@
 				B502441A1025D36B002B13E1 /* ProxyTests.m */,
 				B52D4A3010DA4EE0008E8365 /* PerformanceTests.h */,
 				B52D4A3110DA4EE0008E8365 /* PerformanceTests.m */,
+				0BB9C48C12948E83008D75BB /* ASINSStringRFC1123DataCategoryTests.h */,
+				0BB9C48D12948E83008D75BB /* ASINSStringRFC1123DataCategoryTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -568,6 +578,7 @@
 				B53E624B1255EB7E00C1E79A /* ASIWebPageRequest.m in Sources */,
 				B53E62721255ED8700C1E79A /* ASIDataCompressor.m in Sources */,
 				B53E62901255EE4B00C1E79A /* ASIDataDecompressor.m in Sources */,
+				0BB9C47B12948C56008D75BB /* ASINSStringRFC1123DateCategory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -608,6 +619,7 @@
 				B53E62711255ED8700C1E79A /* ASIDataCompressor.m in Sources */,
 				B53E628F1255EE4B00C1E79A /* ASIDataDecompressor.m in Sources */,
 				B53E62EF1255F73300C1E79A /* ASIDataCompressorTests.m in Sources */,
+				0BB9C48E12948E83008D75BB /* ASINSStringRFC1123DataCategoryTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -671,7 +683,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "Unit Tests (GHUnit)";
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};

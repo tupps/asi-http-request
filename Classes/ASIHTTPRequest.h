@@ -852,10 +852,6 @@ typedef void (^ASIDataBlock)(NSData *data);
 // And also by ASIS3Request
 + (NSString *)base64forData:(NSData *)theData;
 
-// Returns a date from a string in RFC1123 format
-+ (NSDate *)dateFromRFC1123String:(NSString *)string;
-
-
 // Used for detecting multitasking support at runtime (for backgrounding requests)
 #if TARGET_OS_IPHONE
 + (BOOL)isMultitaskingSupported;
