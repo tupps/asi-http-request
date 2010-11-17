@@ -23,7 +23,7 @@ static NSString *apiKey = @"";
 @implementation ASICloudFilesRequestTests
 
 @synthesize networkQueue;
-
+ /*
 // Authenticate before any test if there's no auth token present
 - (void)authenticate {
 	if (![ASICloudFilesRequest authToken]) {
@@ -326,7 +326,7 @@ static NSString *apiKey = @"";
 	
 	GHAssertNotNil([request cdnURI], @"Failed to POST to CDN container");
 }
-
+*/
 #pragma mark -
 #pragma mark Memory Management
 
