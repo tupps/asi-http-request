@@ -1451,7 +1451,9 @@ static NSOperationQueue *sharedQueue = nil;
 			return;
 		}
 		[self failWithError:ASIRequestTimedOutError];
-		[self cancelLoad];
+		if (! [self didUseCachedResponse]) {
+			[self cancelLoad];
+		}
 		[self setComplete:YES];
 		[[self cancelledLock] unlock];
 		return;
@@ -3291,7 +3293,7 @@ static NSOperationQueue *sharedQueue = nil;
 	if ([self mainRequest]) {
 		theRequest = [self mainRequest];
 	}
-
+	
 	if (headers && dataPath) {
 
 		// only 200 responses are stored in the cache, so let the client know
