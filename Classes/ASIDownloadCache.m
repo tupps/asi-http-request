@@ -342,6 +342,77 @@ static NSString *permanentCacheFolder = @"PermanentStore";
 	[[self accessLock] unlock];
 }
 
+#if NS_BLOCKS_AVAILABLE
+
+- (void)clearCachedResponsesForStoragePolicy:(ASICacheStoragePolicy)storagePolicy 
+				  withShouldKeepInCacheBlock:(ASIKeepInCacheBlock) shouldCache {
+	[[self accessLock] lock];
+	if (![self storagePath]) {
+		[[self accessLock] unlock];
+		return;
+	}
+	NSString *path = [[self storagePath] stringByAppendingPathComponent:(storagePolicy == ASICacheForSessionDurationCacheStoragePolicy ? sessionCacheFolder : permanentCacheFolder)];
+	
+	BOOL isDirectory = NO;
+	BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory];
+	if (exists && !isDirectory || !exists) {
+		[[self accessLock] unlock];
+		return;
+	}
+	
+	NSError *error = nil;
+	NSArray *cacheFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
+	if (error) {
+		[[self accessLock] unlock];
+		[NSException raise:@"FailedToTraverseCacheDirectory" format:@"Listing cache directory failed at path '%@'",path];	
+	}
+	
+	for (NSString *file in cacheFiles) {
+		NSString *pathExtension = [file pathExtension];
+		if ([pathExtension isEqualToString:@"cachedheaders"]) {
+			NSDictionary *header = [NSDictionary dictionaryWithContentsOfFile:[path stringByAppendingPathComponent:file]];
+			if (! shouldCache(header)) {
+				NSString *cachedFileName = [file stringByReplacingOccurrencesOfString:@".cachedheaders" withString:@""];
+				for (NSString *delFile in cacheFiles) {
+					if ([delFile rangeOfString:cachedFileName].location != NSNotFound) {
+						[[NSFileManager defaultManager] removeItemAtPath:[path stringByAppendingPathComponent:delFile] error:&error];
+						if (error) {
+							[[self accessLock] unlock];
+							[NSException raise:@"FailedToRemoveCacheFile" format:@"Failed to remove cached data at path '%@'",path];	
+						}
+					} 
+				}
+			} 
+		}
+	}
+
+	[[self accessLock] unlock];
+}
+
+- (void)clearExpiredContentForStoragePolicy:(ASICacheStoragePolicy)storagePolicy {
+	[self clearCachedResponsesForStoragePolicy:storagePolicy 
+					withShouldKeepInCacheBlock:^(NSDictionary *headers) {
+						NSObject *expiresHeader = [headers objectForKey:@"Expires"];
+						if (expiresHeader) {
+							NSDate *expiresDate = [ASIHTTPRequest dateFromRFC1123String:(NSString *)expiresHeader];
+							if (expiresDate && [expiresDate compare:[NSDate date]] == NSOrderedAscending) {
+								return NO;
+							}
+						}
+						return YES; 
+					}];
+}
+
+- (void)clearCachedResponsesForStoragePolicy:(ASICacheStoragePolicy)storagePolicy {
+	[self clearCachedResponsesForStoragePolicy:storagePolicy 
+					withShouldKeepInCacheBlock:^(NSDictionary *headers) {
+							return NO; 
+						}];
+}
+
+
+#else
+
 - (void)clearCachedResponsesForStoragePolicy:(ASICacheStoragePolicy)storagePolicy
 {
 	[[self accessLock] lock];
@@ -350,7 +421,7 @@ static NSString *permanentCacheFolder = @"PermanentStore";
 		return;
 	}
 	NSString *path = [[self storagePath] stringByAppendingPathComponent:(storagePolicy == ASICacheForSessionDurationCacheStoragePolicy ? sessionCacheFolder : permanentCacheFolder)];
-
+	
 	BOOL isDirectory = NO;
 	BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory];
 	if (exists && !isDirectory || !exists) {
@@ -375,6 +446,8 @@ static NSString *permanentCacheFolder = @"PermanentStore";
 	}
 	[[self accessLock] unlock];
 }
+
+#endif
 
 + (BOOL)serverAllowsResponseCachingForRequest:(ASIHTTPRequest *)request
 {
@@ -424,6 +497,7 @@ static NSString *permanentCacheFolder = @"PermanentStore";
 
 - (BOOL)canUseCachedDataForRequest:(ASIHTTPRequest *)request
 {
+	
 	// Ensure the request is allowed to read from the cache
 	if ([request cachePolicy] & ASIDoNotReadFromCacheCachePolicy) {
 		return NO;

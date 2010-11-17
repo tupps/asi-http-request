@@ -87,7 +87,17 @@ typedef enum _ASICacheStoragePolicy {
 // Returns the location to use to store a cached response body for a particular request
 - (NSString *)pathToStoreCachedResponseDataForRequest:(ASIHTTPRequest *)request;
 
+#if NS_BLOCKS_AVAILABLE
+
+typedef BOOL (^ ASIKeepInCacheBlock)(NSDictionary *responseHeaders);
+- (void)clearCachedResponsesForStoragePolicy:(ASICacheStoragePolicy)storagePolicy 
+				  withShouldKeepInCacheBlock:(ASIKeepInCacheBlock) shouldCache;
+- (void)clearCachedResponsesForStoragePolicy:(ASICacheStoragePolicy)cachePolicy;
+- (void)clearExpiredContentForStoragePolicy:(ASICacheStoragePolicy)storagePolicy;
+
+#else
+
 // Clear cached data stored for the passed storage policy
 - (void)clearCachedResponsesForStoragePolicy:(ASICacheStoragePolicy)cachePolicy;
-
+#endif
 @end
