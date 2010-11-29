@@ -274,6 +274,7 @@ static NSString *permanentCacheFolder = @"PermanentStore";
 
 		// New content is not different
 		if ([request responseStatusCode] == 304) {
+			[[self accessLock] unlock];
 			return YES;
 		}
 
@@ -294,7 +295,7 @@ static NSString *permanentCacheFolder = @"PermanentStore";
 		if (expires) {
 			if ([[expires dateFromRFC1123] timeIntervalSinceNow] < 0) {
 				[[self accessLock] unlock];
-				return NO;
+				return YES;
 			}
 		}
 		// Look for a max-age header
@@ -309,13 +310,16 @@ static NSString *permanentCacheFolder = @"PermanentStore";
 
 				NSDate *expiryDate = [[[NSDate alloc] initWithTimeInterval:maxAge sinceDate:fetchDate] autorelease];
 
-				if ([expiryDate timeIntervalSinceNow] < 0) {
+				if ([expiryDate timeIntervalSinceNow] >= 0) {
 					[[self accessLock] unlock];
-					return NO;
+					return YES;
 				}
 			}
 		}
 		
+		// No explicit expiration time sent by the server
+		[[self accessLock] unlock];
+		return NO;
 	}
 	
 
