@@ -152,6 +152,8 @@
 	GHAssertTrue(success,@"Failed to use cached response");	
 }
 
+#if NS_BLOCKS_AVAILABLE
+
 - (void) testCacheClearedExpiredContent 
 {
 	[self cacheInitialisation];
@@ -206,6 +208,7 @@
 	GHAssertTrue([request didUseCachedResponse], @"The file should have been left in the cache");	
 }
 
+#endif
 
 - (void) testFallbackToCacheIfLoadFailsCachePolicy
 {

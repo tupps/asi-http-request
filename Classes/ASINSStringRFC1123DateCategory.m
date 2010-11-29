@@ -9,7 +9,7 @@
 #import "ASINSStringRFC1123DateCategory.h"
 
 
-@implementation ASINSStringRFC1123DateCategory
+@implementation NSString (ASINSStringRFC1123DateCategory)
 
 // Based on hints from http://stackoverflow.com/questions/1850824/parsing-a-rfc-822-date-with-nsdateformatter
 - (NSDate *)dateFromRFC1123
